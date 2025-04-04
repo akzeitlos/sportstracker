@@ -1,0 +1,115 @@
+/* Grundlegende Reset-Einstellungen */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* Verhindert, dass Padding und Border die Gesamtbreite beeinflussen */
+}
+
+body, html {
+  font-family: Arial, sans-serif; /* Standard-Schriftart */
+  height: 100%; /* Stellt sicher, dass der Body den gesamten Bildschirm ausfüllt */
+  background-color: #f0f0f0; /* Heller Hintergrund für die App */
+  color: #333; /* Dunkelgraue Textfarbe für bessere Lesbarkeit */
+}
+
+body {
+  background-image: url('../../assets/images/login-background.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  margin: 0;
+}
+
+
+/* Grundlegende Layout-Einstellungen */
+#root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Flexbox-Container für vertikale Ausrichtung der Inhalte */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* Volle Bildschirmhöhe */
+}
+
+/* Allgemeine Container für jede Seite */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Links im gesamten Body */
+a {
+  text-decoration: none; /* Entfernt die Standard-Unterstreichung */
+  color: inherit; /* Übernimmt die Textfarbe des übergeordneten Elements */
+}
+
+/* Buttons (kann auf die meisten Buttons angewendet werden) */
+button {
+  padding: 10px 20px;
+  background-color: #4CAF50; /* Grüner Hintergrund */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #45a049; /* Dunklerer Grünton beim Hover */
+}
+
+/* Eingabefelder (z.B. für Formulare) */
+input, select, textarea {
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+  font-size: 16px;
+}
+
+input[type="submit"] {
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+}
+
+/* Überschriften */
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0;
+  font-family: 'Arial', sans-serif;
+  color: #333;
+}
+
+/* Flexbox für vertikale Zentrierung */
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Für Bildhintergrund auf der gesamten Seite */
+.full-background {
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,0 +1,96 @@
+/* Gesamtes Layout für die Registrierungsseite */
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    position: absolute; /* Damit der Hintergrund den ganzen Bildschirm ausfüllt */
+  }
+  
+  /* Container für das Registrierungsformular */
+  .register-form {
+    background-color: rgba(0, 0, 0, 0.5); /* Halbdurchsichtiges schwarzes Overlay */
+    padding: 30px;
+    border-radius: 10px;
+    width: 300px;  /* Breite auf 500px begrenzt */
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Schattierung für den Kasten */
+  }
+
+
+.register-logo {
+    width: 100%;
+    padding: 20px 20px 10px 20px;
+  }
+  
+  /* Überschrift für das Formular */
+  .register-form h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: white;  /* Weiße Farbe für die Überschrift */
+  }
+  
+  /* Eingabefelder mit transparentem Hintergrund und weißen Linien */
+  .register-form input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid white;  /* Dünne weiße Linie */
+    border-radius: 5px;
+    background-color: transparent;  /* Transparenter Hintergrund */
+    color: white;  /* Weiße Schriftfarbe */
+    font-size: 16px;
+    outline: none; /* Entfernt den Standard-Outline-Effekt */
+    transition: border-color 0.3s ease; /* Sanfter Übergang */
+    margin-bottom: 10px;
+  }
+
+  /* Placeholder-Text wirklich weiß machen */
+    .register-form input::placeholder {
+        color: white !important;
+        opacity: 1 !important; /* Stellt sicher, dass der Text nicht halbtransparent ist */
+    }
+    
+  
+  /* Eingabefelder bei Fokus */
+  .register-form input:focus {
+    border-color: rgba(102, 16, 105, 1);  /* Grüner Rand bei Fokussierung */
+  }
+  
+  /* Button mit dunklem Hintergrund und weißer Schrift */
+  .register-form button {
+    width: 100%;
+    padding: 10px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+  }
+  
+  /* Hover-Effekt für den Button */
+  .register-form button:hover {
+    background-color: rgba(102, 16, 105, 1); /* Dunklerer Schatten bei Hover */
+  }
+  
+  /* Responsives Design für kleinere Bildschirme */
+  @media (max-width: 600px) {
+    .register-form {
+      width: 90%; /* Breiter auf kleinen Bildschirmen */
+      padding: 20px;
+    }
+  
+    .register-form h2 {
+      font-size: 20px;
+    }
+  
+    .register-form input, .register-form button {
+      font-size: 14px;
+    }
+  }
+  

@@ -1,0 +1,76 @@
+.dashboard {
+    font-family: 'Arial', sans-serif;
+  }
+  
+  h2 {
+    color: #333;
+    text-align: left;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .stats-container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    margin: 0 0;
+  }
+  
+  .stats-container ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .activity-item {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-gap: 15px;
+    padding: 12px 20px;
+    margin-bottom: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    align-items: center;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .activity-item:hover {
+    background-color: #f1f1f1;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .activity-item span {
+    font-size: 14px;
+    color: #444;
+  }
+  
+  .activity-item .date {
+    font-weight: bold;
+    color: #2d3e50;
+    text-align: left;
+  }
+  
+  .activity-item .sets-reps,
+  .activity-item .total {
+    text-align: center;
+    font-weight: normal;
+  }
+  
+  .activity-item .total {
+    color: #2e7d32;
+    font-weight: bold;
+    text-align: right;
+  }
+  
+  .max-reps, .total-reps {
+    text-align: center;
+    font-size: 18px;
+    color: #2e7d32;
+    font-weight: bold;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #e8f5e9;
+    border-radius: 6px;
+  }
+  

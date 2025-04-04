@@ -1,0 +1,151 @@
+/* === Wrapper für das Dashboard === */
+.dashboard-wrapper {
+  display: flex;
+  flex-direction: column; /* Immer untereinander */
+  align-items: center;
+  gap: 30px;
+  margin-top: 150px; /* Mehr Abstand, damit die Buttons nicht unter dem Navbar landen */
+  padding: 0 30px;
+}
+
+/* === Dashboard Container === */
+.dashboard-container {
+  display: flex;
+  background: transparent;
+  overflow: hidden;
+  width: 100%;
+  max-width: 1600px; /* Maximale Breite */
+  border-radius: 10px;
+  min-height: 400px;
+}
+
+/* === Sidebar === */
+.sidebar {
+  width: 25%; /* Sidebar bleibt bei 25% */
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border-radius: 10px 0 0 10px;
+  box-sizing: border-box;
+}
+
+/* Menüliste in der Sidebar */
+.sidebar .menu {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar .menu li {
+  margin-bottom: 15px;
+}
+
+.sidebar .menu button {
+  background-color: #444;
+  color: white;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+  border-radius: 5px;
+}
+
+/* === Aktiver Button in der Sidebar === */
+.sidebar .menu button.active {
+  background-color: #555; /* Aktiver Button Hintergrund */
+}
+
+.sidebar .menu button:hover {
+  background-color: #555;
+}
+
+/* === Content-Bereich === */
+.content {
+  width: 75%; /* Content nimmt die restlichen 75% ein */
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+  overflow-y: auto;
+  box-sizing: border-box;
+  border-radius: 0 10px 10px 0;
+}
+
+/* === Responsive Design für kleinere Bildschirme === */
+@media (max-width: 1300px) {
+  .dashboard-wrapper {
+    flex-direction: column;
+    gap: 50px;
+  }
+
+  .dashboard-container {
+    flex-direction: column;
+    width: 100%;  
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .sidebar,
+  .content {
+    width: 100%;
+    border-radius: 0;
+  }
+}
+
+/* === Buttons oben über Sidebar und Content === */
+.dashboard-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 100px;
+  gap: 30px; /* Größerer Abstand zwischen den Buttons */
+}
+
+.dashboard-buttons button {
+  padding: 15px 30px; /* Größeres Padding für größere Buttons */
+  background-color: black;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 18px; /* Größere Schrift */
+  font-weight: bold;
+  border-radius: 10px; /* Abgerundete Ecken */
+  transition: background-color 0.3s;
+}
+
+.dashboard-buttons button:hover {
+  background-color: rgba(102, 16, 105, 1);
+}
+
+/* === Sidebar Buttons === */
+.sidebar .menu button {
+  background-color: #444;
+  color: white;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+  border-radius: 5px;
+}
+
+.sidebar .menu button:hover,
+.sidebar .menu button.active {
+  background-color: #555;
+}
+
+/* === Active Button Styling === */
+button.active {
+  background-color: rgba(102, 16, 105, 1); /* Aktive Buttons in lila */
+  font-weight: bold;
+}
+
+/* === Optional: Ein bisschen Abstand zwischen den Buttons und dem Dashboard Wrapper === */
+.dashboard-wrapper {
+  margin-top: 30px; /* Abstand zwischen Buttons und Dashboard */
+}

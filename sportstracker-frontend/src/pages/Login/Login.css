@@ -1,0 +1,116 @@
+/* Gesamtes Layout für die Login-Seite */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  position: absolute; /* Damit das Bild den ganzen Bildschirm ausfüllt */
+}
+
+/* Container für das Login-Formular */
+.login-form {
+  background-color: rgba(0, 0, 0, 0.5); /* Halbdurchsichtiges schwarzes Overlay */
+  padding: 30px;
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Schattierung für den Kasten */
+}
+
+/* Überschrift für das Formular */
+.login-form h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: white;  /* Weiße Farbe für die Überschrift */
+}
+
+/* Eingabefelder mit transparenter Hintergrundfarbe und weißen Linien */
+.login-form input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid white;  /* Dünne weiße Linie */
+  border-radius: 5px;
+  background-color: transparent;  /* Sehr transparenter Hintergrund */
+  color: white;  /* Weiße Schriftfarbe */
+  font-size: 16px;
+  outline: none; /* Entfernt den Standard-Outline-Effekt */
+  transition: border-color 0.3s ease; /* Sanfte Übergangsfarbe beim Fokussieren */
+}
+
+/* Placeholder-Text wirklich weiß machen */
+.login-form input::placeholder {
+  color: white !important;
+  opacity: 1 !important; /* Stellt sicher, dass der Text nicht halbtransparent ist */
+}
+
+/* Eingabefelder bei Fokus */
+.login-form input:focus {
+  border-color: rgba(102, 16, 105, 1);  /* Grüner Rand bei Fokussierung */
+}
+
+.login-logo {
+  width: 100%;
+  padding: 20px 20px 10px 20px;
+}
+
+.slogan {
+  color: white;
+  margin-bottom:10px;
+}
+
+/* Button mit transparentem Hintergrund und weißer Umrandung */
+.login-form button {
+  width: 100%;
+  padding: 10px;
+  background-color: black;
+  color: white;
+  border: none; /* Weiße Umrandung */
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+/* Hover-Effekt für den Button */
+.login-form button:hover {
+  background-color: rgba(102, 16, 105, 1); /* Dunklerer Schatten bei Hover */
+}
+
+/* Register-Button ohne Hintergrund, nur Text */
+.register-button {
+  width: 100%;
+  padding: 10px;
+  background: none !important; /* Kein Hintergrund */
+  color: white; /* Weiße Schriftfarbe */
+  border: none; /* Kein Rahmen */
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+  text-decoration: none; /* Unterstrich für den Link-Look */
+  transition: color 0.3s ease; /* Farbwechsel beim Hover */
+}
+
+/* Hover-Effekt: Farbe leicht heller */
+.register-button:hover {
+  color: #ddd; /* Helleres Weiß/Grau */
+  text-decoration: none; /* Entfernt den Unterstrich beim Hover */
+}
+/* Responsives Design: Damit das Formular auf kleinen Bildschirmen besser aussieht */
+@media (max-width: 480px) {
+  .login-form {
+    width: 90%; /* Formular breiter auf kleinen Bildschirmen */
+    padding: 20px;
+  }
+
+  .login-form h2 {
+    font-size: 20px; /* Kleinere Schriftgröße für Überschrift */
+  }
+
+  .login-form input, .login-form button {
+    font-size: 14px; /* Kleinere Schrift für Eingabefelder und Button */
+  }
+}
