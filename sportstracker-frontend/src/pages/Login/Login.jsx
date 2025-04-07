@@ -14,7 +14,7 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("${apiUrl}/api/login", { emailOrUsername, password });
+      const res = await axios.post(`${apiUrl}/api/login`, { emailOrUsername, password });
       localStorage.setItem("token", res.data.token);
       alert("Login erfolgreich!");
       window.location.href = "/dashboard";

@@ -16,7 +16,7 @@ export default function Register() {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("${apiUrl}/api/register", { firstname, lastname, username, email, password });
+      await axios.post(`${apiUrl}/api/register`, { firstname, lastname, username, email, password });
       alert("Registrierung erfolgreich! Jetzt einloggen.");
       window.location.href = "/";
     } catch (err) {

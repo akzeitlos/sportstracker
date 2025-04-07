@@ -13,7 +13,7 @@ export default function DashboardComponent({ type }) {
   // Hole die Benutzerdaten und Stats
   useEffect(() => {
     const token = localStorage.getItem("token");
-    fetch("${apiUrl}/api/user/stats", {
+    fetch(`${apiUrl}/api/user/stats`, {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${token}`,
