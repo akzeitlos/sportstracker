@@ -9,3 +9,6 @@ services:
     container_name: frontend-app
     restart: unless-stopped
     command: npx serve -s dist -l 3000  # Statt Vite-Dev-Server den Build-Server
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4

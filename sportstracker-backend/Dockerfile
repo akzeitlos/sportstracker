@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Installiere die Dependencies
-RUN npm install
+RUN npm install --no-cache
 
 # Kopiere den Rest des Codes
 COPY . .
