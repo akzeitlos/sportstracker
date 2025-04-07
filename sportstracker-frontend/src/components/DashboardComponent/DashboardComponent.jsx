@@ -8,8 +8,8 @@ export default function DashboardComponent({ type }) {
   const [loading, setLoading] = useState(true);
 
   // Dynamische Basis-URL für die API je nach Umgebung
-  const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";  // Falls keine Umgebungsvariable gesetzt ist, verwende localhost
-
+  const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";  // Falls keine Umgebungsvariable gesetzt ist, verwende localhost
+  console.log(import.meta.env.VITE_API_URL);
   // Hole die Benutzerdaten und Stats
   useEffect(() => {
     const token = localStorage.getItem("token");

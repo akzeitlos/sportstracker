@@ -11,7 +11,7 @@ export default function EditProfile() {
   const [password, setPassword] = useState("");
 
   // Dynamische Basis-URL für die API je nach Umgebung
-  const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";  // Falls keine Umgebungsvariable gesetzt ist, verwende localhost
+  const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";  // Falls keine Umgebungsvariable gesetzt ist, verwende localhost
 
   useEffect(() => {
     // Lade die aktuellen Benutzerdaten
