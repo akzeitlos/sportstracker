@@ -1,0 +1,25 @@
+[0;1;32m●[0m apache2.service - The Apache HTTP Server
+     Loaded: loaded (]8;;file://ubuntu/usr/lib/systemd/system/apache2.service/usr/lib/systemd/system/apache2.service]8;;; [0;1;32menabled[0m; preset: [0;1;32menabled[0m)
+     Active: [0;1;32mactive (running)[0m since Mon 2025-04-07 13:18:55 UTC; 4min 5s ago
+       Docs: ]8;;https://httpd.apache.org/docs/2.4/https://httpd.apache.org/docs/2.4/]8;;
+    Process: 613 ExecStart=/usr/sbin/apachectl start (code=exited, status=0/SUCCESS)
+   Main PID: 644 (apache2)
+      Tasks: 13 (limit: 975)
+     Memory: 79.2M (peak: 84.7M)
+        CPU: 542ms
+     CGroup: /system.slice/apache2.service
+             ├─[0;38;5;245m 644 /usr/sbin/apache2 -k start[0m
+             ├─[0;38;5;245m 734 /usr/sbin/apache2 -k start[0m
+             ├─[0;38;5;245m 735 /usr/sbin/apache2 -k start[0m
+             ├─[0;38;5;245m 737 /usr/sbin/apache2 -k start[0m
+             ├─[0;38;5;245m 738 /usr/sbin/apache2 -k start[0m
+             ├─[0;38;5;245m 739 /usr/sbin/apache2 -k start[0m
+             ├─[0;38;5;245m1963 /usr/sbin/apache2 -k start[0m
+             ├─[0;38;5;245m1970 /usr/sbin/apache2 -k start[0m
+             ├─[0;38;5;245m1971 /usr/sbin/apache2 -k start[0m
+             ├─[0;38;5;245m1972 /usr/sbin/apache2 -k start[0m
+             ├─[0;38;5;245m1973 /usr/sbin/apache2 -k start[0m
+             └─[0;38;5;245m1974 /usr/sbin/apache2 -k start[0m
+
+Apr 07 13:18:54 ubuntu systemd[1]: Starting apache2.service - The Apache HTTP Server...
+Apr 07 13:18:55 ubuntu systemd[1]: Started apache2.service - The Apache HTTP Server.
