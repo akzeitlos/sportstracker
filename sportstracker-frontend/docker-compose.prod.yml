@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    container_name: frontend-app
+    restart: unless-stopped
+    command: npx serve -s dist -l 3000  # Statt Vite-Dev-Server den Build-Server

@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app  # Volumen nur für den Backend-Code
+      - /app/node_modules
+    command: nodemon server.js
