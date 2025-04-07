@@ -10,9 +10,12 @@ export default function EditProfile() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  // Dynamische Basis-URL für die API je nach Umgebung
+  const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";  // Falls keine Umgebungsvariable gesetzt ist, verwende localhost
+
   useEffect(() => {
     // Lade die aktuellen Benutzerdaten
-    axios.get("http://localhost:5000/api/user", {
+    axios.get("${apiUrl}/api/user", {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     })
     .then((response) => {
@@ -38,7 +41,7 @@ export default function EditProfile() {
 
     try {
       // Sende die aktualisierten Benutzerdaten an das Backend
-      await axios.put("http://localhost:5000/api/user/update", 
+      await axios.put("${apiUrl}/api/user/update", 
         { firstname, lastname, username, email, password },
         { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );

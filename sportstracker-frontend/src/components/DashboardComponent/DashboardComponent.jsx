@@ -7,10 +7,13 @@ export default function DashboardComponent({ type }) {
   const [totalReps, setTotalReps] = useState(0); // Gesamt-Reps für den gewählten Typ
   const [loading, setLoading] = useState(true);
 
+  // Dynamische Basis-URL für die API je nach Umgebung
+  const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";  // Falls keine Umgebungsvariable gesetzt ist, verwende localhost
+
   // Hole die Benutzerdaten und Stats
   useEffect(() => {
     const token = localStorage.getItem("token");
-    fetch("http://localhost:5000/api/user/stats", {
+    fetch("${apiUrl}/api/user/stats", {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${token}`,

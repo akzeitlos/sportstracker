@@ -10,10 +10,13 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  // Dynamische Basis-URL für die API je nach Umgebung
+  const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";  // Falls keine Umgebungsvariable gesetzt ist, verwende localhost
+
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/register", { firstname, lastname, username, email, password });
+      await axios.post("${apiUrl}/api/register", { firstname, lastname, username, email, password });
       alert("Registrierung erfolgreich! Jetzt einloggen.");
       window.location.href = "/";
     } catch (err) {

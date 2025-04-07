@@ -53,8 +53,11 @@ export default function NewActivity({ type }) {
       date: new Date().toISOString().slice(0, 19).replace('T', ' '), // Formatierung für MySQL DATETIME
     };
   
+    // Dynamische Basis-URL für die API je nach Umgebung
+    const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";  // Falls keine Umgebungsvariable gesetzt ist, verwende localhost
+
     // API-Aufruf an das Backend
-    fetch("http://localhost:5000/api/activity", {  // Backend-URL hier
+    fetch("${apiUrl}/api/activity", {  // Backend-URL hier
       method: "POST",
       headers: {
         "Content-Type": "application/json",
