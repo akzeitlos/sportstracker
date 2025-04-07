@@ -1,11 +1,11 @@
 version: '3.8'
 services:
   frontend:
-    build: ./frontend
+    build: .
     ports:
       - "3000:3000"
     volumes:
-      - ./frontend:/app  # Volumen nur für den Frontend-Code
+      - .:/app  # Volumen nur für den Frontend-Code
       - /app/node_modules
     environment:
       - NODE_ENV=development
