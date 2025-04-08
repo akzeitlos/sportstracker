@@ -1,23 +1,34 @@
-# Base image
-FROM node:18
+#############################
+# 👉 Development Stage
+#############################
+FROM node:18 AS dev
 
-# Create app directory
 WORKDIR /app
 
-# Install dependencies
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+EXPOSE 3000
+CMD ["npm", "run", "dev", "--", "--host"]
+
+#############################
+# 👉 Production Stage
+#############################
+FROM node:18 AS prod
+
+WORKDIR /app
+
 COPY package*.json ./
 RUN npm install -g serve && npm install
 
-# Copy the rest of the app
 COPY . .
 
-# Default build step (overridden in dev)
 RUN npm run build
 
+# Optional: Include .htaccess for client-side routing
 COPY .htaccess ./dist/
 
-# Expose port used by Vite or serve
 EXPOSE 3000
-
-# In production, serve the built files
 CMD ["serve", "-s", "dist", "-l", "3000"]
