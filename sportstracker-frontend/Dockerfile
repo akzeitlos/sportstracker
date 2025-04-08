@@ -6,10 +6,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Installiere alle Abhängigkeiten (auch devDependencies)
-RUN npm config set proxy http://pushandpull.fun:3000
-RUN npm config set https-proxy http://pushandpull:3000
-RUN echo "NPM Version:" && npm -v
-RUN npm install --verbose
+RUN npm install --registry=https://registry.npmjs.org/
 
 COPY . .
 
