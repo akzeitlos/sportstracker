@@ -11,7 +11,7 @@ RUN npm install -g npm@9.2.0
 COPY . .
 
 # Baue die Anwendung (falls nötig)
-RUN npm run build
+RUN npm run build --verbose
 
 # 2. Production Stage
 FROM node:18-alpine
