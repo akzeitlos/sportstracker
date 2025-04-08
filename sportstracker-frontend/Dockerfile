@@ -6,7 +6,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Installiere alle Abhängigkeiten (auch devDependencies)
-RUN npm install -g npm@9.2.0
+RUN npm install --verbose
 
 COPY . .
 
