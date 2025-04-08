@@ -4,8 +4,6 @@ FROM node:18
 # Create app directory
 WORKDIR /app
 
-COPY .htaccess ./dist/
-
 # Install dependencies
 COPY package*.json ./
 RUN npm install -g serve && npm install
@@ -15,6 +13,8 @@ COPY . .
 
 # Default build step (overridden in dev)
 RUN npm run build
+
+COPY .htaccess ./dist/
 
 # Expose port used by Vite or serve
 EXPOSE 3000
