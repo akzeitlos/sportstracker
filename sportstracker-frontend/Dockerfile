@@ -1,28 +1,21 @@
-# 1. Build Stage
-FROM node:18 AS builder
+# Base image
+FROM node:18
 
+# Create app directory
 WORKDIR /app
 
+# Install dependencies
 COPY package*.json ./
+RUN npm install -g serve && npm install
 
-# Installiere alle Abhängigkeiten (auch devDependencies)
-RUN npm install --verbose
-
+# Copy the rest of the app
 COPY . .
 
-# Baue die Anwendung (falls nötig)
-#RUN npm run build --verbose || (cat /root/.npm/_logs/* || true)
+# Default build step (overridden in dev)
+RUN npm run build
 
-# 2. Production Stage
-FROM node:18-alpine
-
-WORKDIR /app
-
-# Kopiere nur die benötigten Dateien aus der Build-Phase
-COPY --from=builder /app /app
-
-# Exponiere den Port, auf dem die Anwendung laufen soll
+# Expose port used by Vite or serve
 EXPOSE 3000
 
-# Führe Vite aus, indem du es direkt aus dem node_modules-Verzeichnis startest
-CMD ["./node_modules/.bin/vite", "preview", "--host", "--port", "3000"]
+# In production, serve the built files
+CMD ["serve", "-s", "dist", "-l", "3000"]

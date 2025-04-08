@@ -1,15 +1,17 @@
 version: '3.8'
+
 services:
-  frontend:
-    build: .
+  frontend-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    container_name: frontend-app
     ports:
       - "3000:3000"
     volumes:
-      - .:/app  # Volumen nur für den Frontend-Code
+      - .:/app
       - /app/node_modules
+    command: ["npm", "run", "dev", "--", "--host"]
     environment:
-      - NODE_ENV=development
-    command: npm run dev  # Startet den Vite-Dev-Server für Hot-Reload
-    dns:
-      - 8.8.8.8
-      - 8.8.4.4
+      - HOST=0.0.0.0
