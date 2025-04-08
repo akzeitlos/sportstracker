@@ -6,8 +6,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Installiere alle Abhängigkeiten (auch devDependencies)
-RUN npm cache clean --force
-RUN npm install --verbose
+RUN npm install -g npm@9.2.0
 
 COPY . .
 
