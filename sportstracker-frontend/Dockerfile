@@ -11,7 +11,7 @@ RUN npm install --verbose
 COPY . .
 
 # Baue die Anwendung (falls nötig)
-RUN npm run build --verbose
+#RUN npm run build --verbose || (cat /root/.npm/_logs/* || true)
 
 # 2. Production Stage
 FROM node:18-alpine
