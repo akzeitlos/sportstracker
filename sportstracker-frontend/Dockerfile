@@ -6,7 +6,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Installiere alle Abhängigkeiten (auch devDependencies)
-RUN npm install
+RUN npm install --registry=https://registry.npmjs.org/
 
 COPY . .
 
