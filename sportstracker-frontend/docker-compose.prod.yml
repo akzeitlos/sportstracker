@@ -8,6 +8,7 @@ services:
     environment:
       - NODE_ENV=production
     container_name: frontend-app
+    command: npm run build  # Startet den Vite-Dev-Server für Hot-Reload
     restart: unless-stopped
     dns:
       - 8.8.8.8
