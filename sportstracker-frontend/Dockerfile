@@ -4,6 +4,8 @@ FROM node:18
 # Create app directory
 WORKDIR /app
 
+COPY .htaccess ./dist/
+
 # Install dependencies
 COPY package*.json ./
 RUN npm install -g serve && npm install
