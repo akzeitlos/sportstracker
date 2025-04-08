@@ -3,9 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import authRoutes from './routes/authRoutes.js';
 import activitiesRoutes from './routes/activitiesRoutes.js';
-import https from 'https';
 import http from 'http';
-import fs from 'fs';
 
 dotenv.config();
 
@@ -17,19 +15,7 @@ app.use(express.json()); // JSON-Daten verarbeiten
 app.use("/api", authRoutes);
 app.use("/api", activitiesRoutes);
 
-// Entscheide, ob HTTPS oder HTTP verwendet werden soll
-if (process.env.NODE_ENV === 'production') {
-  const options = {
-    key: fs.readFileSync('/etc/letsencrypt/live/pushandpull.fun/privkey.pem'),
-    cert: fs.readFileSync('/etc/letsencrypt/live/pushandpull.fun/fullchain.pem')
-  };
-  // Produktionsumgebung: HTTPS
-  https.createServer(options, app).listen(5000, () => {
-    console.log('Backend läuft auf https://pushandpull.fun:5000');
-  });
-} else {
-  // Lokale Umgebung: HTTP
-  http.createServer(app).listen(5000, () => {
-    console.log('Backend läuft auf http://localhost:5000');
-  });
-}
+// Lokale Umgebung: HTTP (Kein HTTPS in Docker benötigt)
+http.createServer(app).listen(5000, () => {
+  console.log('Backend läuft auf http://localhost:5000');
+});
