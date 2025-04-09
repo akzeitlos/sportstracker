@@ -23,6 +23,8 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install -g serve && npm install
 
+COPY . .
+
 #Server zu schwach
 RUN npm run build
 
