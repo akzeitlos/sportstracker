@@ -20,14 +20,8 @@ FROM node:18 AS prod
 
 WORKDIR /app
 
-# Nur dist und package.json falls nötig
-# COPY dist ./dist
-
 COPY package*.json ./
 RUN npm install -g serve && npm install
-
-# Nur ohne Build!
-# COPY . .
 
 #Server zu schwach
 RUN npm run build
