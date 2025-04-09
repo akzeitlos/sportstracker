@@ -16,6 +16,6 @@ app.use("/api", authRoutes);
 app.use("/api", activitiesRoutes);
 
 // Lokale Umgebung: HTTP (Kein HTTPS in Docker benötigt)
-http.createServer(app).listen(5000, () => {
-  console.log('Backend läuft auf http://localhost:5000');
+http.createServer(app).listen(5000, '0.0.0.0', () => {
+  console.log('Backend läuft auf http://0.0.0.0:5000');
 });
