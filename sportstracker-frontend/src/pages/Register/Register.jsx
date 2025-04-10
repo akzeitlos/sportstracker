@@ -18,7 +18,7 @@ export default function Register() {
     setErrors({}); // vorherige Fehler löschen
   
     try {
-      await axios.post(`${apiUrl}/api/register`, {
+      await axios.post(`${apiUrl}/register`, {
         firstname,
         lastname,
         username,
