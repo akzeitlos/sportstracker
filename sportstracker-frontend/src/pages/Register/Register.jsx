@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import Logo from '../../assets/logo/pushAndPullLogo.svg';
-import "./Register.css";  // Importiere das CSS für Styling
+import "./Register.css";
 
 export default function Register() {
   const [firstname, setFirstname] = useState("");
@@ -9,17 +9,40 @@ export default function Register() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({});
 
-  // Dynamische Basis-URL für die API je nach Umgebung
-  const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";  // Falls keine Umgebungsvariable gesetzt ist, verwende localhost
+  const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
   const handleRegister = async (e) => {
     e.preventDefault();
+    setErrors({}); // vorherige Fehler löschen
+  
     try {
-      await axios.post(`${apiUrl}/api/register`, { firstname, lastname, username, email, password });
-      alert("Registrierung erfolgreich! Jetzt einloggen.");
+      await axios.post(`${apiUrl}/api/register`, {
+        firstname,
+        lastname,
+        username,
+        email,
+        password
+      }, {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+  
       window.location.href = "/";
     } catch (err) {
-      alert("Fehler: " + err.response.data.message);
+      const backendErrors = err.response?.data?.errors;
+  
+      if (backendErrors) {
+        if (!backendErrors.general) {
+          backendErrors.general = "Please check the fields.";
+        }
+        setErrors(backendErrors);
+        return;
+      }
+  
+      setErrors({ general: "Something went wrong. Please try again." });
     }
   };
 
@@ -28,11 +51,68 @@ export default function Register() {
       <form className="register-form" onSubmit={handleRegister}>
         <img className="login-logo" src={Logo} alt="Push&Pull Logo" />
         <h2>Sign up</h2>
-        <input type="text" placeholder="First name" value={firstname} onChange={(e) => setFirstname(e.target.value)} />
-        <input type="text" placeholder="Last name" value={lastname} onChange={(e) => setLastname(e.target.value)} />
-        <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
-        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+
+        {errors.general && (
+          <div className="form-error" role="alert">
+            <strong>Oops!</strong> {errors.general}
+          </div>
+        )}
+
+        <div className="form-group">
+          <input
+            type="text"
+            placeholder="First name"
+            value={firstname}
+            onChange={(e) => setFirstname(e.target.value)}
+            className={errors.firstname ? "input-error" : ""}
+          />
+          {errors.firstname && <small className="error-text">{errors.firstname}</small>}
+        </div>
+
+        <div className="form-group">
+          <input
+            type="text"
+            placeholder="Last name"
+            value={lastname}
+            onChange={(e) => setLastname(e.target.value)}
+            className={errors.lastname ? "input-error" : ""}
+          />
+          {errors.lastname && <small className="error-text">{errors.lastname}</small>}
+        </div>
+
+        <div className="form-group">
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className={errors.username ? "input-error" : ""}
+          />
+          {errors.username && <small className="error-text">{errors.username}</small>}
+        </div>
+
+        <div className="form-group">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className={errors.email ? "input-error" : ""}
+          />
+          {errors.email && <small className="error-text">{errors.email}</small>}
+        </div>
+
+        <div className="form-group">
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className={errors.password ? "input-error" : ""}
+          />
+          {errors.password && <small className="error-text">{errors.password}</small>}
+        </div>
+
         <button type="submit">Sign up</button>
       </form>
     </div>

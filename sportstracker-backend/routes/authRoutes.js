@@ -1,20 +1,33 @@
 // routes/authRoutes.js
+
 import express from 'express';
-import { register, login, updateProfile, getUser } from '../controllers/authController.js';
-import authenticate from '../middleware/authMiddleware.js';
+import {
+  register,
+  login,
+  updateProfile,
+  getUser
+} from '../controllers/authController.js';
+
+import {
+  registerValidator,
+  loginValidator
+} from '../middleware/auth/authValidator.js';
+
+import { validate } from '../middleware/validator/validate.js';
+import authenticate from '../middleware/auth/authMiddleware.js';
 
 const router = express.Router();
 
-// Registrierung
-router.post("/register", register);
+// 🔐 Login mit Feldvalidierung
+router.post("/login", loginValidator, validate, login);
 
-// Login
-router.post("/login", login);
+// 📝 Registrierung mit Validator & Fehlerbehandlung
+router.post("/register", registerValidator, validate, register);
 
-// Profil aktualisieren (PUT-Route)
+// 🛡️ Profil-Update (nur mit gültigem Token)
 router.put("/user/update", authenticate, updateProfile);
-// Benutzer abrufen (GET-Route)
-router.get("/user", authenticate, getUser);
 
+// 👤 Benutzerinformationen abrufen (geschützt)
+router.get("/user", authenticate, getUser);
 
 export default router;

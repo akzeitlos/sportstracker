@@ -1,7 +1,7 @@
 // routes/activitiesRoutes.js
 import express from 'express';
 import { createActivity, getUserStats } from '../controllers/activityController.js';
-import authenticate from '../middleware/authMiddleware.js';
+import authenticate from '../middleware/auth/authMiddleware.js';
 
 const router = express.Router();
 

@@ -8,17 +8,8 @@ function App() {
 
   return (
 <BrowserRouter>
-      <div
-        style={{
-          backgroundImage: `url(${backgroundImage})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          height: '100vh',
-          margin: 0,
-        }}
-      >
+
         <AppRoutes /> {/* Deine Routen-Komponente */}
-      </div>
     </BrowserRouter>
 
   )
