@@ -15,7 +15,7 @@ export default function Login() {
     setErrors({}); // vorherige Fehler zurücksetzen
 
     try {
-      const res = await axios.post(`${apiUrl}/api/login`, {
+      const res = await axios.post(`${apiUrl}/login`, {
         emailOrUsername,
         password,
       }, {

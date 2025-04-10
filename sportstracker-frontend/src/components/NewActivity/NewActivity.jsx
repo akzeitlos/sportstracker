@@ -57,7 +57,7 @@ export default function NewActivity({ type }) {
     const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";  // Falls keine Umgebungsvariable gesetzt ist, verwende localhost
 
     // API-Aufruf an das Backend
-    fetch(`${apiUrl}/api/activity`, {  // Backend-URL hier
+    fetch(`${apiUrl}/activity`, {  // Backend-URL hier
       method: "POST",
       headers: {
         "Content-Type": "application/json",
