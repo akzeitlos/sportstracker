@@ -15,7 +15,7 @@ export default function EditProfile() {
 
   useEffect(() => {
     // Lade die aktuellen Benutzerdaten
-    axios.get(`${apiUrl}/user`, {
+    axios.get(`${apiUrl}/api/user`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     })
     .then((response) => {
@@ -41,7 +41,7 @@ export default function EditProfile() {
 
     try {
       // Sende die aktualisierten Benutzerdaten an das Backend
-      await axios.put(`${apiUrl}/user/update`, 
+      await axios.put(`${apiUrl}/api/user/update`, 
         { firstname, lastname, username, email, password },
         { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );
