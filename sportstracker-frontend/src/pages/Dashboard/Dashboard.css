@@ -37,32 +37,11 @@
   list-style-type: none;
   padding: 0;
   margin: 0;
+  width: 100%;
 }
 
 .sidebar .menu li {
-  margin-bottom: 15px;
-}
-
-.sidebar .menu button {
-  background-color: #444;
-  color: white;
-  border: none;
-  padding: 10px;
-  width: 100%;
-  text-align: left;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s;
-  border-radius: 5px;
-}
-
-/* === Aktiver Button in der Sidebar === */
-.sidebar .menu button.active {
-  background-color: #555; /* Aktiver Button Hintergrund */
-}
-
-.sidebar .menu button:hover {
-  background-color: #555;
+  margin-bottom: .75rem;
 }
 
 /* === Content-Bereich === */
@@ -105,44 +84,7 @@
 }
 
 .dashboard-buttons button {
-  padding: 15px 30px; /* Größeres Padding für größere Buttons */
-  background-color: black;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-size: 18px; /* Größere Schrift */
-  font-weight: bold;
-  border-radius: 10px; /* Abgerundete Ecken */
-  transition: background-color 0.3s;
-}
-
-.dashboard-buttons button:hover {
-  background-color: rgba(102, 16, 105, 1);
-}
-
-/* === Sidebar Buttons === */
-.sidebar .menu button {
-  background-color: #444;
-  color: white;
-  border: none;
-  padding: 10px;
-  width: 100%;
-  text-align: left;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s;
-  border-radius: 5px;
-}
-
-.sidebar .menu button:hover,
-.sidebar .menu button.active {
-  background-color: #555;
-}
-
-/* === Active Button Styling === */
-button.active {
-  background-color: rgba(102, 16, 105, 1); /* Aktive Buttons in lila */
-  font-weight: bold;
+  width:initial;
 }
 
 /* === Optional: Ein bisschen Abstand zwischen den Buttons und dem Dashboard Wrapper === */

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Navbar from "../../components/Navbar/Navbar.jsx";
 import NewActivity from "../../components/NewActivity/NewActivity.jsx";
 import DashboardComponent from "../../components/DashboardComponent/DashboardComponent.jsx";
 import "./Dashboard.css";
@@ -15,9 +14,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div>
-      <Navbar />
-      
+    <div>    
       {/* Buttons oben über dem Dashboard */}
       <div className="dashboard-buttons">
         <button

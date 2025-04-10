@@ -1,0 +1,93 @@
+
+.impressum-container {
+  max-width: 1200px;
+  margin: 100px auto;
+  padding: 30px;
+  background-color: #ffffffdd;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  font-family: Arial, sans-serif;
+  color: #222;
+}
+
+.impressum-container h1 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #661069; /* Dein Lila-Ton */
+}
+
+.impressum-container h2 {
+  font-size: 20px;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  color: #444;
+}
+
+.impressum-container p {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.impressum-container a {
+  color: #661069;
+  text-decoration: underline;
+}
+
+.impressum-container a:hover {
+  color: #450848;
+  text-decoration: none;
+}
+
+@media (max-width: 600px) {
+  .impressum-container {
+    padding: 20px;
+    margin: 80px 10px;
+  }
+
+  .impressum-container h1 {
+    font-size: 24px;
+  }
+
+  .impressum-container h2 {
+    font-size: 18px;
+  }
+
+  .impressum-container p {
+    font-size: 15px;
+  }
+}
+
+.impressum-container h1,
+.impressum-container h2 {
+  color: #661069;
+}
+
+.impressum-container a {
+  color: #661069;
+  text-decoration: underline;
+}
+
+.language-toggle {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.language-toggle button {
+  width: initial; /* Wichtig: Nicht 100% */
+  background-color: transparent;
+  border: 1px solid #661069;
+  color: #661069;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.language-toggle button:hover,
+.language-toggle button.active {
+  background-color: #661069;
+  color: white;
+}

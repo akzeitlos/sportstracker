@@ -80,24 +80,6 @@
   border-color: rgba(102, 16, 105, 1);
 }
 
-/* Button */
-.login-form button {
-  width: 100%;
-  padding: 10px;
-  background-color: black;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-top: 10px;
-}
-
-.login-form button:hover {
-  background-color: rgba(102, 16, 105, 1);
-}
-
 /* Register-Link Button */
 .register-button {
   width: 100%;
@@ -153,34 +135,6 @@
 
 .info-panel li {
   margin-bottom: 10px;
-}
-
-/* Formularelemente bei Fehler */
-.form-group {
-  margin-bottom: 15px;
-  text-align: left;
-}
-
-.form-error {
-  background-color: #fdecea;
-  color: #b00020;
-  border: 1px solid #f5c2c7;
-  padding: 10px 15px;
-  border-radius: 5px;
-  margin-bottom: 15px;
-  text-align: left;
-}
-
-.error-text {
-  color: red;
-  font-size: 13px;
-  margin-top: 5px;
-  display: block;
-  padding-left: 2px;
-}
-
-.input-error {
-  border: 1px solid red !important;
 }
 
 /* Responsives Design */

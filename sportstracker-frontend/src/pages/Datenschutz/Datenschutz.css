@@ -1,0 +1,94 @@
+.datenschutz-container {
+  max-width: 1200px;
+  margin: 100px auto;
+  padding: 30px;
+  background-color: #ffffffdd;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  font-family: Arial, sans-serif;
+  color: #222;
+}
+
+.datenschutz-container h1 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #661069;
+}
+
+.datenschutz-container h2 {
+  font-size: 20px;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  color: #444;
+}
+
+.datenschutz-container p {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.datenschutz-container ul {
+  padding-left: 20px;
+  margin-top: 10px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.datenschutz-container li {
+  margin-bottom: 6px;
+}
+
+.datenschutz-container a {
+  color: #661069;
+  text-decoration: underline;
+}
+
+.datenschutz-container a:hover {
+  color: #450848;
+  text-decoration: none;
+}
+
+.language-toggle {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.language-toggle button {
+  width: initial;
+  background-color: transparent;
+  border: 1px solid #661069;
+  color: #661069;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.language-toggle button:hover,
+.language-toggle button.active {
+  background-color: #661069;
+  color: white;
+}
+
+@media (max-width: 600px) {
+  .datenschutz-container {
+    padding: 20px;
+    margin: 80px 10px;
+  }
+
+  .datenschutz-container h1 {
+    font-size: 24px;
+  }
+
+  .datenschutz-container h2 {
+    font-size: 18px;
+  }
+
+  .datenschutz-container p,
+  .datenschutz-container ul {
+    font-size: 15px;
+  }
+}

@@ -50,23 +50,6 @@
     border-color: rgba(102, 16, 105, 1);
   }
   
-  /* Submit button */
-  .edit-profile-form button {
-    width: 100%;
-    padding: 10px;
-    background-color: black;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 10px;
-  }
-  
-  .edit-profile-form button:hover {
-    background-color: rgba(102, 16, 105, 1);
-  }
   
   .form-group {
     margin-bottom: 10px;

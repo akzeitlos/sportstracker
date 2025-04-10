@@ -106,7 +106,7 @@ export default function Login() {
             your push-up record, this platform helps you stay consistent and see
             your hard work pay off.
           </p>
-          <p>With Push & Pull, you can:</p>
+          <p><strong>With Push & Pull, you can:</strong></p>
           <ul>
             <li>
               <strong>Log your daily push-ups and pull-ups</strong> with just a

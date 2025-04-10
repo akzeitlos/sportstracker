@@ -19,32 +19,11 @@ body {
   margin: 0;
 }
 
-
 /* Grundlegende Layout-Einstellungen */
 #root {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-}
-
-/* Flexbox-Container für vertikale Ausrichtung der Inhalte */
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh; /* Volle Bildschirmhöhe */
-}
-
-/* Allgemeine Container für jede Seite */
-.page-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  padding: 20px;
-  box-sizing: border-box;
 }
 
 /* Links im gesamten Body */
@@ -53,10 +32,11 @@ a {
   color: inherit; /* Übernimmt die Textfarbe des übergeordneten Elements */
 }
 
-/* Buttons (kann auf die meisten Buttons angewendet werden) */
+/* Button */
 button {
-  padding: 10px 20px;
-  background-color: #4CAF50; /* Grüner Hintergrund */
+  width: 100%;
+  padding: 1rem .75rem;
+  background-color: black;
   color: white;
   border: none;
   border-radius: 5px;
@@ -66,8 +46,15 @@ button {
 }
 
 button:hover {
-  background-color: #45a049; /* Dunklerer Grünton beim Hover */
+  background-color: rgba(102, 16, 105, 1);
 }
+
+/* === Active Button Styling === */
+button.active {
+  background-color: rgba(102, 16, 105, 1); /* Aktive Buttons in lila */
+  font-weight: bold;
+}
+
 
 /* Eingabefelder (z.B. für Formulare) */
 input, select, textarea {
@@ -79,12 +66,6 @@ input, select, textarea {
   font-size: 16px;
 }
 
-input[type="submit"] {
-  background-color: #4CAF50;
-  color: white;
-  cursor: pointer;
-}
-
 /* Überschriften */
 h1, h2, h3, h4, h5, h6 {
   margin: 0 0 20px 0;
@@ -92,23 +73,28 @@ h1, h2, h3, h4, h5, h6 {
   color: #333;
 }
 
-/* Flexbox für vertikale Zentrierung */
-.centered {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  width: 100%;
-  height: 100%;
+.form-error {
+  background-color: #fdecea;
+  color: #b00020;
+  border: 1px solid #f5c2c7;
+  padding: 10px 15px;
+  border-radius: 5px;
+  margin-bottom: 15px;
 }
 
-/* Für Bildhintergrund auf der gesamten Seite */
-.full-background {
-  background-size: cover;
-  background-position: center;
-  height: 100%;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.form-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.error-text {
+  color: red;
+  font-size: 13px;
+  margin-top: 5px;
+  display: block;
+  padding-left: 2px;
+}
+
+.input-error {
+  border: 1px solid red !important;
 }
