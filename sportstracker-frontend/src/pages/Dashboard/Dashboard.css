@@ -4,8 +4,7 @@
   flex-direction: column; /* Immer untereinander */
   align-items: center;
   gap: 30px;
-  margin-top: 150px; /* Mehr Abstand, damit die Buttons nicht unter dem Navbar landen */
-  padding: 0 30px;
+  padding: 80px 30px 100px 30px;
 }
 
 /* === Dashboard Container === */
@@ -24,7 +23,7 @@
   width: 25%; /* Sidebar bleibt bei 25% */
   background-color: rgba(0, 0, 0, 0.8);
   color: white;
-  padding: 20px;
+  padding: 30px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -47,7 +46,7 @@
 /* === Content-Bereich === */
 .content {
   width: 75%; /* Content nimmt die restlichen 75% ein */
-  padding: 20px;
+  padding: 30px;
   background-color: rgba(255, 255, 255, 0.8);
   overflow-y: auto;
   box-sizing: border-box;
@@ -79,7 +78,6 @@
 .dashboard-buttons {
   display: flex;
   justify-content: center;
-  margin-top: 100px;
   gap: 30px; /* Größerer Abstand zwischen den Buttons */
 }
 

@@ -1,13 +1,17 @@
 
+.impressum-wrapper {
+  padding: 100px 30px 100px 30px;
+}
+
 .impressum-container {
   max-width: 1200px;
-  margin: 100px auto;
-  padding: 30px;
   background-color: #ffffffdd;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   font-family: Arial, sans-serif;
   color: #222;
+  padding: 100px 30px 100px 30px;
+  margin: 0 auto;
 }
 
 .impressum-container h1 {
@@ -39,10 +43,6 @@
 }
 
 @media (max-width: 600px) {
-  .impressum-container {
-    padding: 20px;
-    margin: 80px 10px;
-  }
 
   .impressum-container h1 {
     font-size: 24px;

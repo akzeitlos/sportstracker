@@ -39,15 +39,34 @@ export const createActivity = (req, res) => {
   });
 };
 
-
 export const getUserStats = (req, res) => {
-  console.log(req.user);
-  const userId = req.user.userId; // Benutzer-ID aus dem JWT-Token
+  const userId = req.user.userId;
+  const { range = 'alltime' } = req.query;
+
+  let dateCondition = '';
+  switch (range) {
+    case 'day':
+      dateCondition = "AND DATE(date) = CURDATE()";
+      break;
+    case 'week':
+      dateCondition = "AND YEARWEEK(date, 1) = YEARWEEK(CURDATE(), 1)";
+      break;
+    case 'month':
+      dateCondition = "AND MONTH(date) = MONTH(CURDATE()) AND YEAR(date) = YEAR(CURDATE())";
+      break;
+    case 'year':
+      dateCondition = "AND YEAR(date) = YEAR(CURDATE())";
+      break;
+    case 'alltime':
+    default:
+      break;
+  }
 
   const query = `
     SELECT type, sets, reps, date
     FROM activities
     WHERE user_id = ?
+    ${dateCondition}
   `;
 
   db.query(query, [userId], (err, results) => {
@@ -55,8 +74,7 @@ export const getUserStats = (req, res) => {
       console.error('Error fetching user stats:', err);
       return res.status(500).json({ message: 'Error fetching user stats' });
     }
-  
-    // Gruppiere die Ergebnisse nach dem Typ der Aktivität
+
     const groupedStats = results.reduce((acc, activity) => {
       if (!acc[activity.type]) {
         acc[activity.type] = [];
@@ -64,33 +82,114 @@ export const getUserStats = (req, res) => {
       acc[activity.type].push(activity);
       return acc;
     }, {});
-  
-    // Erstelle die Stats mit Sets, Reps und Total Reps für jede Aktivität
+
     const stats = Object.keys(groupedStats).map(type => {
       const activities = groupedStats[type];
-  
-      // Erstelle die Statistiken für jede Aktivität
+
       const typeStats = activities.map(activity => ({
-        type: activity.type,
         sets: activity.sets,
         reps: activity.reps,
-        total_reps: activity.sets * activity.reps, // Gesamt Reps für diese Aktivität
+        total_reps: activity.sets * activity.reps,
         date: activity.date,
       }));
-  
-      // Berechne den Maximalwert für Reps pro Aktivitätstyp
-      const maxReps = activities.reduce((max, activity) => {
-        return activity.reps > max ? activity.reps : max;
-      }, 0);
-  
-      // Berechne die Gesamtzahl der Reps für den jeweiligen Typ
-      const totalReps = typeStats.reduce((total, stat) => total + stat.total_reps, 0);
-  
-      return { type, stats: typeStats, maxReps, totalReps };
+
+      const maxReps = activities.reduce((max, a) => Math.max(max, a.reps), 0);
+      const totalReps = typeStats.reduce((sum, s) => sum + s.total_reps, 0);
+
+      return {
+        type,
+        totalReps,
+        maxReps,
+        stats: typeStats
+      };
     });
-  
-    // Antwort mit den gruppierten Statistiken und den Maximal- und Gesamtwerten pro Typ
+
     res.status(200).json(stats);
   });
-  
+};
+
+
+
+export const getLeaderboardStats = (req, res) => {
+  const { range = 'alltime', type = null } = req.query;
+
+  let conditions = [];
+  let params = [];
+
+  // Zeitbereichsbedingung
+  switch (range) {
+    case 'day':
+      conditions.push("DATE(a.date) = CURDATE()");
+      break;
+    case 'week':
+      conditions.push("YEARWEEK(a.date, 1) = YEARWEEK(CURDATE(), 1)");
+      break;
+    case 'month':
+      conditions.push("MONTH(a.date) = MONTH(CURDATE()) AND YEAR(a.date) = YEAR(CURDATE())");
+      break;
+    case 'year':
+      conditions.push("YEAR(a.date) = YEAR(CURDATE())");
+      break;
+    case 'alltime':
+    default:
+      break;
+  }
+
+  // Aktivitäts-Typ
+  if (type) {
+    conditions.push("a.type = ?");
+    params.push(type);
+  }
+
+  const whereClause = conditions.length ? `WHERE ${conditions.join(" AND ")}` : '';
+
+  const query = `
+    SELECT 
+      a.user_id, a.type, a.sets, a.reps,
+      u.username, u.firstname, u.lastname
+    FROM activities a
+    JOIN users u ON a.user_id = u.id
+    ${whereClause}
+  `;
+
+  db.query(query, params, (err, results) => {
+    if (err) {
+      console.error('Error fetching leaderboard stats:', err);
+      return res.status(500).json({ message: 'Error fetching leaderboard stats' });
+    }
+
+    // Gruppieren nach Benutzer
+    const groupedByUser = results.reduce((acc, activity) => {
+      const userId = activity.user_id;
+      const activityTotal = activity.sets * activity.reps;
+
+      if (!acc[userId]) {
+        acc[userId] = {
+          userId,
+          username: activity.username,
+          firstname: activity.firstname,
+          lastname: activity.lastname,
+          totalReps: 0
+        };
+      }
+
+      acc[userId].totalReps += activityTotal;
+      return acc;
+    }, {});
+
+    // Leaderboard sortieren & kürzen
+    const leaderboard = Object.values(groupedByUser)
+      .sort((a, b) => b.totalReps - a.totalReps)
+      .slice(0, 10)
+      .map(user => ({
+        userId: user.userId,
+        username: user.username,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        totalReps: user.totalReps,
+        type
+      }));
+
+    res.status(200).json(leaderboard);
+  });
 };

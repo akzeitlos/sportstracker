@@ -1,87 +1,68 @@
 import { useState, useEffect } from "react";
+import CircularSwipeCounter from "../CircularSwipeCounter/CircularSwipeCounter";
 import "./NewActivity.css";
 
-
 export default function NewActivity({ type }) {
-  const [sets, setSets] = useState(""); // Initialer Wert: Bitte auswählen
-  const [reps, setReps] = useState(""); // Initialer Wert: Bitte auswählen
-  const [total, setTotal] = useState(0); // Gesamtzahl startet bei 0
-  const [successMessage, setSuccessMessage] = useState(""); // Erfolgsmeldung
-
-  // Berechnet die Gesamtzahl, wenn Sets und Reps geändert werden
-  const calculateTotal = () => {
-    if (sets && reps) {
-      return sets * reps;
-    }
-    return 0; // Wenn keine gültigen Werte, Gesamtzahl bleibt 0
-  };
+  const [sets, setSets] = useState(0);
+  const [reps, setReps] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
-    // Wenn Sets oder Reps geändert werden, die Gesamtzahl neu berechnen
-    setTotal(calculateTotal());
+    setTotal(sets * reps);
   }, [sets, reps]);
 
-  // Funktion zum Erstellen der Optionen für die Select-Felder
-  const createOptions = (max) => {
-    let options = [];
-    for (let i = 1; i <= max; i++) {
-      options.push(
-        <option key={i} value={i}>
-          {i}
-        </option>
-      );
-    }
-    return options;
-  };
-
-  const handleSetsChange = (e) => {
-    setSets(e.target.value);
-  };
-
-  const handleRepsChange = (e) => {
-    setReps(e.target.value);
-  };
-
   const handleSave = () => {
-    const calculatedTotal = sets && reps ? sets * reps : 0; // Berechneter Gesamtwert
+    const parsedSets = parseInt(sets);
+    const parsedReps = parseInt(reps);
+  
+    // 🚨 Validation: prevent zero or invalid
+    if (
+      isNaN(parsedSets) || isNaN(parsedReps) ||
+      parsedSets < 1 || parsedReps < 1
+    ) {
+      setSuccessMessage("Please enter valid Sets and Reps greater than 0.");
+      return;
+    }
+  
+    const calculatedTotal = parsedSets * parsedReps;
   
     const activity = {
       type,
-      sets: parseInt(sets),
-      reps: parseInt(reps),
+      sets: parsedSets,
+      reps: parsedReps,
       total: calculatedTotal,
-      date: new Date().toISOString().slice(0, 19).replace('T', ' '), // Formatierung für MySQL DATETIME
+      date: new Date().toISOString().slice(0, 19).replace("T", " "),
     };
   
-    // Dynamische Basis-URL für die API je nach Umgebung
-    const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";  // Falls keine Umgebungsvariable gesetzt ist, verwende localhost
-
-    // API-Aufruf an das Backend
-    fetch(`${apiUrl}/activity`, {  // Backend-URL hier
+    const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
+  
+    fetch(`${apiUrl}/activity`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify(activity),
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error("Network response was not ok");
         }
         return response.json();
       })
       .then((data) => {
         setSuccessMessage("Activity saved successfully!");
-        setSets("");
-        setReps("");
+        setSets(0);
+        setReps(0);
         setTotal(0);
       })
       .catch((error) => {
         console.error("Error saving activity:", error);
-        setSuccessMessage(""); // Erfolgsmeldung zurücksetzen bei Fehler
+        setSuccessMessage("Failed to save activity. Please try again.");
       });
   };
+  
 
   return (
     <div className="new-activity">
@@ -90,32 +71,18 @@ export default function NewActivity({ type }) {
       {successMessage && <div className="success-message">{successMessage}</div>}
 
       <div className="fields-container">
-        <div className="select-field">
-          <label htmlFor="sets">Sets:</label>
-          <select id="sets" value={sets} onChange={handleSetsChange}>
-            <option value="">Please select</option>
-            {createOptions(10)} {/* Optionen bis 10 */}
-          </select>
-        </div>
+  <div className="sets-counter">
+    <CircularSwipeCounter label="Sets" value={sets} onChange={setSets} min={0} max={10} />
+  </div>
 
-        <div className="select-field">
-          <label htmlFor="reps">Reps:</label>
-          <select id="reps" value={reps} onChange={handleRepsChange}>
-            <option value="">Please select</option>
-            {createOptions(50)} {/* Optionen bis 10 */}
-          </select>
-        </div>
+  <div className="total-field">
+    <label className="total">Total: {total}</label>
+  </div>
 
-        <div className="select-field">
-          <label htmlFor="total">Total:</label>
-          <input
-            id="total"
-            type="text"
-            value={total} // Zeigt die berechnete Gesamtzahl an
-            disabled
-          />
-        </div>
-      </div>
+  <div className="reps-counter">
+    <CircularSwipeCounter label="Reps" value={reps} onChange={setReps} min={0} max={50} />
+  </div>
+</div>
 
       <button onClick={handleSave}>Save Activity</button>
     </div>

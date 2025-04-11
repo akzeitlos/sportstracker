@@ -34,16 +34,14 @@ export default function Navbar() {
   return (
     <nav className="navbar">
       <div className="nav-logo">
-        <img src={Logo} alt="Push&Pull Logo" />
+        <a href="/"><img src={Logo} alt="Push&Pull Logo" /></a> 
       </div>
       <div className="nav-profile">
         <img src={ProfileIcon} alt="Profile" className="profile-icon" onClick={toggleDropdown} />
-        {dropdownOpen && (
-          <div className="profile-menu">
-            <Link to="/edit-profile" className="profile-menu-item">Edit Profile</Link>
-            <button className="profile-menu-item logout" onClick={handleLogout}>Logout</button>
-          </div>
-        )}
+          <div className={`profile-menu ${dropdownOpen ? "open" : ""}`}>
+          <Link to="/edit-profile" className="profile-menu-item">Edit Profile</Link>
+          <button className="profile-menu-item logout" onClick={handleLogout}>Logout</button>
+        </div>
       </div>
     </nav>
   );

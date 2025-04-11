@@ -8,7 +8,7 @@ import "./App.css";
 function AppContent() {
   const location = useLocation();
   const token = localStorage.getItem("token");
-  const hideNavbarRoutes = ["/login", "/register", "/imprint", "privacy-policy"];
+  const hideNavbarRoutes = ["/login", "/register", "imprint", "privacy-policy"];
   const isLoggedIn = !!token;
   const showNavbar = isLoggedIn && !hideNavbarRoutes.includes(location.pathname);
 

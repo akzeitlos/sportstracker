@@ -5,6 +5,7 @@ export default function Datenschutz() {
   const [language, setLanguage] = useState("en");
 
   return (
+    <div class="datenschutz-wrapper">
     <div className="datenschutz-container">
       {/* Sprachumschalter */}
       <div className="language-toggle">
@@ -155,6 +156,7 @@ export default function Datenschutz() {
           </section>
         </div>
       )}
+    </div>
     </div>
   );
 }

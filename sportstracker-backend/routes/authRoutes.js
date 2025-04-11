@@ -10,8 +10,11 @@ import {
 
 import {
   registerValidator,
-  loginValidator
+  loginValidator,
+  updateProfileValidator
 } from '../middleware/auth/authValidator.js';
+
+import { checkUniqueProfileFields } from "../middleware/auth/checkUniqueProfileFields.js";
 
 import { validate } from '../middleware/validator/validate.js';
 import authenticate from '../middleware/auth/authMiddleware.js';
@@ -25,7 +28,7 @@ router.post("/login", loginValidator, validate, login);
 router.post("/register", registerValidator, validate, register);
 
 // 🛡️ Profil-Update (nur mit gültigem Token)
-router.put("/user/update", authenticate, updateProfile);
+router.put("/user/update", updateProfileValidator, validate, authenticate, checkUniqueProfileFields, updateProfile);
 
 // 👤 Benutzerinformationen abrufen (geschützt)
 router.get("/user", authenticate, getUser);

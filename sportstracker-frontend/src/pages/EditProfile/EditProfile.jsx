@@ -9,12 +9,11 @@ export default function EditProfile() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({});
 
-  // Dynamische Basis-URL für die API je nach Umgebung
-  const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";  // Falls keine Umgebungsvariable gesetzt ist, verwende localhost
+  const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
   useEffect(() => {
-    // Lade die aktuellen Benutzerdaten
     axios.get(`${apiUrl}/user`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     })
@@ -23,32 +22,41 @@ export default function EditProfile() {
       setLastname(response.data.lastname);
       setUsername(response.data.username);
       setEmail(response.data.email);
-    }) 
+    })
     .catch((error) => {
       console.error("Error loading user data:", error);
-      alert("Failed to load profile information.");
+      setErrors({ general: "Failed to load profile information." });
     });
   }, []);
 
   const handleUpdate = async (e) => {
     e.preventDefault();
+    setErrors({}); // Reset previous errors
 
-    // Check if no changes were made to avoid unnecessary API calls
-    if (firstname === "" || lastname === "" || username === "" || email === "") {
-      alert("Please fill out all fields.");
+    if (!firstname || !lastname || !username || !email) {
+      setErrors({ general: "Please fill out all fields." });
       return;
     }
 
     try {
-      // Sende die aktualisierten Benutzerdaten an das Backend
       await axios.put(`${apiUrl}/user/update`, 
         { firstname, lastname, username, email, password },
         { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );
-      alert("Profile updated successfully!");
-      window.location.href = "/dashboard"; // Zurück zum Dashboard
+
+      window.location.href = "/dashboard";
     } catch (err) {
-      alert("Error: " + err.response.data.message); // Fehlerbehandlung
+      const backendErrors = err.response?.data?.errors;
+
+      if (backendErrors) {
+        if (!backendErrors.general) {
+          backendErrors.general = "Please check the fields.";
+        }
+        setErrors(backendErrors);
+        return;
+      }
+
+      setErrors({ general: "Something went wrong. Please try again." });
     }
   };
 
@@ -58,59 +66,75 @@ export default function EditProfile() {
         <img className="login-logo" src={Logo} alt="Push&Pull Logo" />
         <h2>Edit Profile</h2>
 
+        {errors.general && (
+          <div className="form-error" role="alert">
+            <strong>Oops!</strong> {errors.general}
+          </div>
+        )}
+
         <div className="form-group">
           <label htmlFor="firstname">First name</label>
-          <input 
-            type="text" 
+          <input
+            type="text"
             id="firstname"
-            placeholder="First name" 
-            value={firstname} 
-            onChange={(e) => setFirstname(e.target.value)} 
+            placeholder="First name"
+            value={firstname}
+            onChange={(e) => setFirstname(e.target.value)}
+            className={errors.firstname ? "input-error" : ""}
           />
+          {errors.firstname && <small className="error-text">{errors.firstname}</small>}
         </div>
 
         <div className="form-group">
           <label htmlFor="lastname">Last name</label>
-          <input 
-            type="text" 
+          <input
+            type="text"
             id="lastname"
-            placeholder="Last name" 
-            value={lastname} 
-            onChange={(e) => setLastname(e.target.value)} 
+            placeholder="Last name"
+            value={lastname}
+            onChange={(e) => setLastname(e.target.value)}
+            className={errors.lastname ? "input-error" : ""}
           />
+          {errors.lastname && <small className="error-text">{errors.lastname}</small>}
         </div>
 
         <div className="form-group">
           <label htmlFor="username">Username</label>
-          <input 
-            type="text" 
+          <input
+            type="text"
             id="username"
-            placeholder="Username" 
-            value={username} 
-            onChange={(e) => setUsername(e.target.value)} 
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className={errors.username ? "input-error" : ""}
           />
+          {errors.username && <small className="error-text">{errors.username}</small>}
         </div>
 
         <div className="form-group">
           <label htmlFor="email">Email</label>
-          <input 
-            type="email" 
+          <input
+            type="email"
             id="email"
-            placeholder="Email" 
-            value={email} 
-            onChange={(e) => setEmail(e.target.value)} 
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className={errors.email ? "input-error" : ""}
           />
+          {errors.email && <small className="error-text">{errors.email}</small>}
         </div>
 
         <div className="form-group">
           <label htmlFor="password">New password (leave empty to keep current)</label>
-          <input 
-            type="password" 
+          <input
+            type="password"
             id="password"
-            placeholder="New password" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
+            placeholder="New password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className={errors.password ? "input-error" : ""}
           />
+          {errors.password && <small className="error-text">{errors.password}</small>}
         </div>
 
         <button type="submit">Save Changes</button>

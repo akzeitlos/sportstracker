@@ -1,82 +1,76 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./DashboardComponent.css";
 
+const timeRanges = ["day", "week", "month", "year", "alltime"];
+
 export default function DashboardComponent({ type }) {
-  const [stats, setStats] = useState([]); // Alle Statistiken des Benutzers
-  const [maxReps, setMaxReps] = useState(0); // Maximalwert für den gewählten Typ
-  const [totalReps, setTotalReps] = useState(0); // Gesamt-Reps für den gewählten Typ
+  const [leaderboard, setLeaderboard] = useState([]);
+  const [range, setRange] = useState("week"); // Default time range
   const [loading, setLoading] = useState(true);
 
-  // Dynamische Basis-URL für die API je nach Umgebung
-  const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";  // Falls keine Umgebungsvariable gesetzt ist, verwende localhost
-  console.log(import.meta.env.VITE_API_URL);
-  // Hole die Benutzerdaten und Stats
+  const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
   useEffect(() => {
     const token = localStorage.getItem("token");
-    fetch(`${apiUrl}/user/stats`, {
-      method: "GET",
+    const url = `${apiUrl}/leaderboard?range=${range}&type=${type}`;
+
+    setLoading(true);
+    fetch(url, {
       headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     })
-      .then((response) => response.json())
+      .then((res) => res.json())
       .then((data) => {
-        // Find the stats for the selected type
-        const typeStats = data.find((statGroup) => statGroup.type === type);
-
-        if (typeStats) {
-          setStats(typeStats.stats); // Set stats for the selected type
-          setMaxReps(typeStats.maxReps); // Set max reps for the selected type
-          setTotalReps(typeStats.totalReps); // Set total reps for the selected type
-        }else {
-            // If no stats for the selected type, reset stats to empty
-            setStats([]);
-            setMaxReps(0);
-            setTotalReps(0);
-          }
+        if (Array.isArray(data)) {
+          setLeaderboard(data);
+        } else {
+          console.warn("Leaderboard response was not an array:", data);
+          setLeaderboard([]); // fallback to empty
+        }
         setLoading(false);
       })
-      .catch((error) => {
-        console.error("Error fetching stats:", error);
+      .catch((err) => {
+        console.error("Error fetching leaderboard:", err);
+        setLeaderboard([]);
         setLoading(false);
       });
-  }, [type]); // Use the type as a dependency to refetch when it changes
+  }, [range, type]);
 
   return (
-    <div className="dashboard">
-      <h2>{type} Dashboard</h2>
+    <div className="dashboard leaderboard">
+      <h2>🏆 {type} Leaderboard</h2>
+
+      {/* Time Range Switcher */}
+      <div className="range-switcher">
+        {timeRanges.map((r) => (
+          <button
+            key={r}
+            className={`range-btn ${range === r ? "active" : ""}`}
+            onClick={() => setRange(r)}
+          >
+            {r.charAt(0).toUpperCase() + r.slice(1)}
+          </button>
+        ))}
+      </div>
 
       {loading ? (
-        <p>Loading stats...</p>
-      ) : (
-        <div className="stats-container">
-          <ul>
-            {stats.length > 0 ? (
-              stats.map((stat, index) => (
-                <li key={index} className="activity-item">
-                  <span className="date">
-                    {new Date(stat.date).toLocaleDateString()} {/* Formatierte Datumsausgabe */}
-                  </span>
-                  <span className="sets-reps">
-                    {stat.sets} Sets x {stat.reps} Reps
-                  </span>
-                  <span className="total">
-                    Total Reps: {stat.total_reps}
-                  </span>
-                </li>
-              ))
-            ) : (
-              <p>No stats available for {type}.</p>
-            )}
-          </ul>
-          <div className="total-reps">
-            <p>All Time Reps: {totalReps}</p> {/* Gesamt-Reps für den gewählten Typ */}
-          </div>
-          <div className="max-reps">
-            <p>Max Reps in one set: {maxReps}</p> {/* Max Reps für den gewählten Typ */}
-          </div>
-        </div>
+        <p>Loading leaderboard...</p>
+      ) : leaderboard.length === 0 ? (
+        <p class="no-data">No leaderboard data available for {type} - {range.charAt(0).toUpperCase() + range.slice(1)}.</p>      ) : (
+        <ul className="leaderboard-list">
+          {leaderboard.map((user, index) => (
+            <li key={user.userId} className="leaderboard-item">
+              <span className="rank">#{index + 1}</span>
+              <div className="user-info">
+                <strong>{user.firstname} {user.lastname}</strong> (@{user.username})
+              </div>
+              <div className="reps-info">
+                {user.totalReps} total reps
+              </div>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import NewActivity from "../../components/NewActivity/NewActivity.jsx";
+import PersonalStatistics from "../../components/PersonalStatistics/PersonalStatistics.jsx";
 import DashboardComponent from "../../components/DashboardComponent/DashboardComponent.jsx";
 import "./Dashboard.css";
 
@@ -14,8 +15,9 @@ export default function Dashboard() {
   };
 
   return (
-    <div>    
-      {/* Buttons oben über dem Dashboard */}
+      <div className="dashboard-wrapper">
+
+        {/* Buttons oben über dem Dashboard */}
       <div className="dashboard-buttons">
         <button
           className={activeType === "Pushup" ? "active" : ""}
@@ -31,7 +33,6 @@ export default function Dashboard() {
         </button>
       </div>
       
-      <div className="dashboard-wrapper">
         <div className="dashboard-container">
           {/* Sidebar */}
           <div className="sidebar">
@@ -52,6 +53,14 @@ export default function Dashboard() {
                   New Activity
                 </button>
               </li>
+              <li>
+                <button
+                  className={activeContent === "personelStatistics" ? "active" : ""}
+                  onClick={() => handleContentChange(activeType, "personelStatistics")}
+                >
+                  Personal Statistics
+                </button>
+              </li>
             </ul>
           </div>
 
@@ -59,9 +68,9 @@ export default function Dashboard() {
           <div className="content">
             {activeContent === "dashboard" && <DashboardComponent type={activeType} />}
             {activeContent === "newActivity" && <NewActivity type={activeType} />}
+            {activeContent === "personelStatistics" && <PersonalStatistics type={activeType} />}
           </div>
         </div>
       </div>
-    </div>
   );
 }

@@ -5,6 +5,8 @@ export default function Impressum() {
   const [language, setLanguage] = useState("de");
 
   return (
+    <div className="impressum-wrapper">
+
     <div className="impressum-container">
       {/* Sprachumschalter */}
       <div className="language-toggle">
@@ -137,6 +139,7 @@ export default function Impressum() {
           </section>
         </div>
       )}
+    </div>
     </div>
   );
 }
