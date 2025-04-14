@@ -87,9 +87,10 @@
 
 /* Mobile: Total ganz nach unten */
 @media (max-width: 800px) {
-  .fields-container {
+  .new-activity .fields-container {
     flex-direction: column;
     align-items: center;
+    gap:0;
   }
 
   .fields-container .sets-counter {
@@ -102,5 +103,6 @@
 
   .fields-container .total-field {
     order: 3;
+    margin-top:15px
   }
 }

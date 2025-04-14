@@ -1,4 +1,3 @@
-
 .stats-container {
   background-color: #ffffff;
   padding: 20px;
@@ -14,8 +13,8 @@
 
 .activity-item {
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-  grid-gap: 15px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 1fr);
+  gap: 15px;
   padding: 12px 20px;
   margin-bottom: 15px;
   background-color: #f9f9f9;
@@ -42,18 +41,19 @@
 }
 
 .activity-item .sets-reps,
-.activity-item .total {
+.activity-item .totalcount {
   text-align: center;
   font-weight: normal;
 }
 
-.activity-item .total {
+.activity-item .totalcount {
   color: rgba(102, 16, 105, 1);
   font-weight: bold;
   text-align: right;
 }
 
-.max-reps, .total-reps {
+.max-reps,
+.total-reps {
   text-align: center;
   font-size: 18px;
   color: rgba(102, 16, 105, 1);
@@ -73,8 +73,8 @@
 }
 
 .range-btn {
-  flex: 1; /* makes each button grow equally */
-  min-width: 0; /* prevents overflow */
+  flex: 1;
+  min-width: 0;
 }
 
 .leaderboard-list {
@@ -86,11 +86,11 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
   background: #f9f9f9;
   border-radius: 8px;
   padding: 0.75rem 1rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .rank {
@@ -127,14 +127,49 @@
   font-weight: bold;
 }
 
-/* Remove bottom radius from toggle button when open */
 .toggle-btn.open {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
 
-/* Remove top radius from stats container when it's open */
 .stats-container.open {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+}
+
+@media (max-width: 800px) {
+  .summary-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .summary-section div {
+    flex: none;
+    width: 100%;
+  }
+
+  .activity-item {
+    display: grid;
+    grid-template-areas:
+      "date sets"
+      "total total";
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 12px 20px;
+  }
+
+  .activity-item .date {
+    grid-area: date;
+    text-align: left;
+  }
+
+  .activity-item .sets-reps {
+    grid-area: sets;
+    text-align: right;
+  }
+
+  .activity-item .totalcount {
+    grid-area: total;
+    text-align: right;
+  }
 }

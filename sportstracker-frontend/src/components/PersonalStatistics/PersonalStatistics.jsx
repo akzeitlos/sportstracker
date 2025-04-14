@@ -13,6 +13,27 @@ export default function PersonalStatistics({ type }) {
 
   const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
+  const getLabel = (label) => {
+    if (window.innerWidth <= 480) {
+      // Shorten for mobile
+      switch (label) {
+        case "alltime":
+          return "All";
+        case "month":
+          return "M";
+        case "week":
+          return "W";
+        case "day":
+          return "D";
+        case "year":
+          return "Y";
+        default:
+          return label;
+      }
+    }
+    return label.charAt(0).toUpperCase() + label.slice(1);
+  };
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     const url = `${apiUrl}/user/stats?range=${range}`;
@@ -53,13 +74,13 @@ export default function PersonalStatistics({ type }) {
 
       {/* Range Switcher */}
       <div className="range-switcher">
-        {timeRanges.map((r) => (
+         {timeRanges.map((r) => (
           <button
             key={r}
             className={`range-btn ${range === r ? "active" : ""}`}
             onClick={() => setRange(r)}
           >
-            {r.charAt(0).toUpperCase() + r.slice(1)}
+            {getLabel(r)}
           </button>
         ))}
       </div>
@@ -94,7 +115,7 @@ export default function PersonalStatistics({ type }) {
             <span className="sets-reps">
               {stat.sets} x {stat.reps} Reps
             </span>
-            <span className="total">Total: {stat.total_reps}</span>
+            <span className="totalcount">Total: {stat.total_reps}</span>
           </li>
         ))}
       </ul>

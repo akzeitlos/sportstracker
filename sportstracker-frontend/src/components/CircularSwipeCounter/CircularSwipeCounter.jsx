@@ -13,6 +13,8 @@ export default function CircularSwipeCounter({ label, value, onChange, min = 0, 
   const percent = ((value - min) / (max - min)) * 100;
   const offset = circumference - (percent / 100) * circumference;
 
+  const inputRef = useRef(null);
+
   // Update local input value when prop value changes
   useEffect(() => {
     setInputValue(value);
@@ -70,20 +72,65 @@ export default function CircularSwipeCounter({ label, value, onChange, min = 0, 
     }
   };
 
+  const handleTouchStart = (e) => {
+    setIsDragging(true);
+    handleTouchMove(e);
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isDragging) return;
+    const touch = e.touches[0];
+    const rect = circleRef.current.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const dx = touch.clientX - centerX;
+    const dy = touch.clientY - centerY;
+    let angle = Math.atan2(dy, dx) * (180 / Math.PI);
+    angle = (angle + 360 + 90) % 360;
+    const newValue = Math.round((angle / 360) * (max - min) + min);
+    onChange(Math.min(max, Math.max(min, newValue)));
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+  };
+
+  const handleInputFocus = () => {
+    if (inputRef.current) {
+      inputRef.current.select();
+    }
+  };
+  
+
   useEffect(() => {
     if (isDragging) {
       window.addEventListener("mousemove", handleMouseMove);
       window.addEventListener("mouseup", handleMouseUp);
+      window.addEventListener("touchmove", handleTouchMove);
+      window.addEventListener("touchend", handleTouchEnd);
     } else {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", handleTouchEnd);
     }
-
+  
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", handleTouchEnd);
     };
   }, [isDragging]);
+
+  useEffect(() => {
+    if (isEditing && inputRef.current) {
+      inputRef.current.focus();
+      inputRef.current.select();
+    }
+  }, [isEditing]);
+    
+  
 
   return (
     <div className="circular-counter" tabIndex={0} onKeyDown={handleKeyDown}>
@@ -93,6 +140,7 @@ export default function CircularSwipeCounter({ label, value, onChange, min = 0, 
         viewBox="0 0 120 120"
         ref={circleRef}
         onMouseDown={handleMouseDown}
+        onTouchStart={handleTouchStart}
       >
         <circle
           cx="60"
@@ -118,12 +166,15 @@ export default function CircularSwipeCounter({ label, value, onChange, min = 0, 
         {isEditing ? (
           <foreignObject x="35" y="38" width="50" height="30">
             <input
+              ref={inputRef}
               className="circle-input"
               value={inputValue}
               onChange={handleInputChange}
               onBlur={handleInputBlur}
               onKeyDown={handleInputKeyDown}
               autoFocus
+              inputMode="numeric"
+              pattern="[0-9]*"
               min={min}
               max={max}
             />
