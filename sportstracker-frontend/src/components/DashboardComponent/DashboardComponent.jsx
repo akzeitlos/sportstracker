@@ -34,20 +34,31 @@ export default function DashboardComponent({ type }) {
   useEffect(() => {
     const token = localStorage.getItem("token");
     const url = `${apiUrl}/leaderboard?range=${range}&type=${type}`;
-
+  
     setLoading(true);
     fetch(url, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          // Handle 401 (unauthorized) or 400 (invalid token)
+          if (res.status === 401 || res.status === 400) {
+            console.warn("Token invalid or missing. Redirecting to login...");
+            localStorage.removeItem("token");
+            window.location.href = "/login";
+          }
+          throw new Error(`Request failed with status ${res.status}`);
+        }
+        return res.json();
+      })
       .then((data) => {
         if (Array.isArray(data)) {
           setLeaderboard(data);
         } else {
           console.warn("Leaderboard response was not an array:", data);
-          setLeaderboard([]); // fallback to empty
+          setLeaderboard([]);
         }
         setLoading(false);
       })
@@ -57,6 +68,7 @@ export default function DashboardComponent({ type }) {
         setLoading(false);
       });
   }, [range, type]);
+  
 
   return (
     <div className="dashboard leaderboard">
@@ -93,7 +105,7 @@ export default function DashboardComponent({ type }) {
                 </strong>{" "}
                 (@{user.username})
               </div>
-              <div className="reps-info">{user.totalReps} total reps</div>
+              <div className="reps-info">{user.totalReps}</div>
             </li>
           ))}
         </ul>

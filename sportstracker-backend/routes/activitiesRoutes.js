@@ -1,6 +1,7 @@
 import express from 'express';
 import { 
-  createActivity, 
+  createActivity,
+  deleteActivity,
   getUserStats, 
   getLeaderboardStats
 } from '../controllers/activityController.js';
@@ -12,6 +13,9 @@ const router = express.Router();
 
 // Aktivität speichern
 router.post('/activity', authenticate, createActivity);
+
+// Aktivität löschen (geschützt)
+router.delete('/activity/:id', authenticate, deleteActivity);
 
 // Benutzerstatistiken (nur für eingeloggte Nutzer)
 router.get('/user/stats', authenticate, getUserStats);

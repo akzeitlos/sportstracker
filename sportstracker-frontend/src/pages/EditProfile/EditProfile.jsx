@@ -17,37 +17,70 @@ export default function EditProfile() {
     axios.get(`${apiUrl}/user`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     })
-    .then((response) => {
-      setFirstname(response.data.firstname);
-      setLastname(response.data.lastname);
-      setUsername(response.data.username);
-      setEmail(response.data.email);
-    })
-    .catch((error) => {
-      console.error("Error loading user data:", error);
-      setErrors({ general: "Failed to load profile information." });
-    });
+      .then((response) => {
+        setFirstname(response.data.firstname);
+        setLastname(response.data.lastname);
+        setUsername(response.data.username);
+        setEmail(response.data.email);
+      })
+      .catch((error) => {
+        const status = error.response?.status;
+        if (status === 401 || status === 400) {
+          console.warn("Unauthorized or invalid token. Redirecting to login...");
+          localStorage.removeItem("token");
+          window.location.href = "/login";
+          return;
+        }
+  
+        console.error("Error loading user data:", error);
+        setErrors({ general: "Failed to load profile information." });
+      });
   }, []);
+  
 
   const handleUpdate = async (e) => {
     e.preventDefault();
     setErrors({}); // Reset previous errors
-
+  
+    // Simple client-side validation
     if (!firstname || !lastname || !username || !email) {
       setErrors({ general: "Please fill out all fields." });
       return;
     }
-
+  
     try {
-      await axios.put(`${apiUrl}/user/update`, 
-        { firstname, lastname, username, email, password },
-        { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+      const response = await axios.put(
+        `${apiUrl}/user/update`,
+        {
+          firstname,
+          lastname,
+          username,
+          email,
+          password,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
       );
-
+  
+      // If update successful → redirect to dashboard
       window.location.href = "/dashboard";
     } catch (err) {
+      const status = err.response?.status;
+  
+      // 🔐 Token-related error → logout and redirect
+      if (status === 401 || status === 400) {
+        console.warn("Unauthorized or invalid token. Redirecting to login...");
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+        return;
+      }
+  
+      // 🛑 Handle field-specific validation errors from backend
       const backendErrors = err.response?.data?.errors;
-
+  
       if (backendErrors) {
         if (!backendErrors.general) {
           backendErrors.general = "Please check the fields.";
@@ -55,10 +88,12 @@ export default function EditProfile() {
         setErrors(backendErrors);
         return;
       }
-
+  
+      // 🧯 Fallback generic error
       setErrors({ general: "Something went wrong. Please try again." });
     }
   };
+  
 
   return (
     <div className="edit-profile-container">

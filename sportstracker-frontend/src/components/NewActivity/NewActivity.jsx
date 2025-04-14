@@ -16,7 +16,6 @@ export default function NewActivity({ type }) {
     const parsedSets = parseInt(sets);
     const parsedReps = parseInt(reps);
   
-    // 🚨 Validation: prevent zero or invalid
     if (
       isNaN(parsedSets) || isNaN(parsedReps) ||
       parsedSets < 1 || parsedReps < 1
@@ -47,6 +46,11 @@ export default function NewActivity({ type }) {
     })
       .then((response) => {
         if (!response.ok) {
+          if (response.status === 401 || response.status === 400) {
+            // 🛑 Unauthorized → redirect
+            localStorage.removeItem("token");
+            window.location.href = "/login";
+          }
           throw new Error("Network response was not ok");
         }
         return response.json();

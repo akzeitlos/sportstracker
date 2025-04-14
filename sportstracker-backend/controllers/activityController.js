@@ -63,7 +63,7 @@ export const getUserStats = (req, res) => {
   }
 
   const query = `
-    SELECT type, sets, reps, date
+    SELECT id, type, sets, reps, date
     FROM activities
     WHERE user_id = ?
     ${dateCondition}
@@ -87,6 +87,7 @@ export const getUserStats = (req, res) => {
       const activities = groupedStats[type];
 
       const typeStats = activities.map(activity => ({
+        id: activity.id,
         sets: activity.sets,
         reps: activity.reps,
         total_reps: activity.sets * activity.reps,
@@ -191,5 +192,33 @@ export const getLeaderboardStats = (req, res) => {
       }));
 
     res.status(200).json(leaderboard);
+  });
+};
+
+// Aktivität löschen
+export const deleteActivity = (req, res) => {
+  const userId = req.user.userId;
+  const { id } = req.params;
+
+  if (!id) {
+    return res.status(400).json({ message: 'Missing activity ID' });
+  }
+
+  const query = `
+    DELETE FROM activities 
+    WHERE id = ? AND user_id = ?
+  `;
+
+  db.query(query, [id, userId], (err, result) => {
+    if (err) {
+      console.error('Error deleting activity:', err);
+      return res.status(500).json({ message: 'Error deleting activity' });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'Activity not found or not authorized' });
+    }
+
+    res.status(200).json({ message: 'Activity deleted successfully' });
   });
 };

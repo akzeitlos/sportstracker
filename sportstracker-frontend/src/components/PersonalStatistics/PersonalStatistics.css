@@ -1,67 +1,37 @@
+/* === General Layout === */
 .stats-container {
   background-color: #ffffff;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-  margin: 0 0;
+  margin: 0;
 }
 
 .stats-container ul {
   list-style-type: none;
   padding: 0;
+  margin: 0;
 }
 
-.activity-item {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 1fr);
-  gap: 15px;
-  padding: 12px 20px;
-  margin-bottom: 15px;
-  background-color: #f9f9f9;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
-  align-items: center;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+.summary-section {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 1rem;
 }
 
-.activity-item:hover {
-  background-color: #f1f1f1;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.details-section {
+  margin-top: 1rem;
 }
 
-.activity-item span {
-  font-size: 14px;
-  color: #444;
+.toggle-btn.open {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
-.activity-item .date {
-  font-weight: bold;
-  color: #2d3e50;
-  text-align: left;
-}
-
-.activity-item .sets-reps,
-.activity-item .totalcount {
-  text-align: center;
-  font-weight: normal;
-}
-
-.activity-item .totalcount {
-  color: rgba(102, 16, 105, 1);
-  font-weight: bold;
-  text-align: right;
-}
-
-.max-reps,
-.total-reps {
-  text-align: center;
-  font-size: 18px;
-  color: rgba(102, 16, 105, 1);
-  font-weight: bold;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 6px;
-  flex: 1;
+.stats-container.open {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
 .range-switcher {
@@ -77,6 +47,25 @@
   min-width: 0;
 }
 
+.no-data {
+  text-align: center;
+  margin-top: 50px;
+  font-weight: bold;
+}
+
+.max-reps,
+.total-reps {
+  text-align: center;
+  font-size: 18px;
+  color: rgba(102, 16, 105, 1);
+  font-weight: bold;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 6px;
+  flex: 1;
+}
+
+/* === Leaderboard === */
 .leaderboard-list {
   list-style: none;
   padding: 0;
@@ -110,33 +99,155 @@
   color: rgba(102, 16, 105, 1);
 }
 
-.summary-section {
+/* === Activity Items: Swipeable Base === */
+.activity-item {
+  border: 1px solid #e0e0e0;
+  background-color: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.swipe-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Red background delete button */
+.delete-background {
+  background-color: #e53935;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 60px;
   display: flex;
-  gap: 1rem;
+  align-items: center;
   justify-content: center;
-  margin-bottom: 1rem;
+  z-index: 1;
 }
 
-.details-section {
-  margin-top: 1rem;
+/* Sliding white content */
+.swipeable-content {
+  background-color: white;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  gap: 15px;
+  padding: 12px 20px;
+  transition: transform 0.3s ease;
+  z-index: 2;
+  position: relative;
 }
 
-.no-data {
-  text-align: center;
-  margin-top: 50px;
+.swipeable-content.swiped {
+  transform: translateX(-60px);
+}
+
+.swipeable-content span {
+  font-size: 14px;
+  color: #444;
+}
+
+.swipeable-content .date {
   font-weight: bold;
+  color: #2d3e50;
+  text-align: left;
 }
 
-.toggle-btn.open {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
+.swipeable-content .sets-reps,
+.swipeable-content .totalcount {
+  font-weight: normal;
 }
 
-.stats-container.open {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+.swipeable-content .totalcount {
+  color: rgba(102, 16, 105, 1);
+  font-weight: bold;
+  text-align: right;
 }
 
+/* Delete Button inside red background */
+.delete-btn {
+  border: none;
+  background: none;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+}
+
+.delete-btn svg {
+  fill: white;
+  width: 24px;
+  height: 24px;
+}
+
+@media (min-width: 801px) {
+  .swipe-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 60px; /* content + delete */
+    align-items: stretch;
+  }
+
+  .swipeable-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
+    padding: 12px 20px;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    background-color: #fff;
+    height: 100%;
+  }
+
+  .delete-background {
+    position: static;
+    background-color: #e53935;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    height: 100%;
+  }
+
+  .delete-btn {
+    background: none;
+    border: none;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .delete-btn svg {
+    fill: white;
+    transition: fill 0.2s ease;
+  }
+
+  .delete-btn:hover svg {
+    fill: #ffb3b3;
+  }
+
+  .swipeable-content .sets-reps {
+    text-align: center;
+  }
+
+  .swipeable-content .totalcount {
+    text-align: right;
+  }
+
+  .swipeable-content.swiped {
+    transform: none !important;
+  }
+}
+
+/* === Mobile === */
 @media (max-width: 800px) {
   .summary-section {
     flex-direction: column;
@@ -144,31 +255,29 @@
   }
 
   .summary-section div {
-    flex: none;
     width: 100%;
   }
 
-  .activity-item {
-    display: grid;
+  .swipeable-content {
     grid-template-areas:
       "date sets"
       "total total";
     grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
     gap: 10px;
-    padding: 12px 20px;
   }
 
-  .activity-item .date {
+  .swipeable-content .date {
     grid-area: date;
     text-align: left;
   }
 
-  .activity-item .sets-reps {
+  .swipeable-content .sets-reps {
     grid-area: sets;
     text-align: right;
   }
 
-  .activity-item .totalcount {
+  .swipeable-content .totalcount {
     grid-area: total;
     text-align: right;
   }
