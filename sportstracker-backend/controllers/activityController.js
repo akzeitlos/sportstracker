@@ -1,15 +1,13 @@
 // controllers/activityController.js
-import db from '../config/db.js';  // Importiere die DB-Verbindung
+import db from '../config/db.js'; // db = createPool().promise()
 
 // Aktivität speichern
-export const createActivity = (req, res) => {
+export const createActivity = async (req, res) => {
   const { type, sets, reps, total, date } = req.body;
-  const userId = req.user.userId; // Benutzer-ID aus dem JWT-Token
+  const userId = req.user.userId;
 
-  // Logge die empfangenen Daten (Debugging-Zwecke)
   console.log('Received data:', req.body);
 
-  // Validierung
   if (!type || !sets || !reps || !total || !date) {
     return res.status(400).json({ message: 'Missing required fields' });
   }
@@ -19,27 +17,24 @@ export const createActivity = (req, res) => {
     VALUES (?, ?, ?, ?, ?, ?)
   `;
 
-  // Logge die SQL-Abfrage (Debugging-Zwecke)
-  console.log('Executing query:', query);
+  try {
+    console.log('Executing query:', query);
+    const [result] = await db.query(query, [type, sets, reps, total, userId, date]);
 
-  db.query(query, [type, sets, reps, total, userId, date], (err, result) => {
-    if (err) {
-      console.error("Error saving activity:", err);
-      return res.status(500).json({ message: 'Error saving activity' });
-    }
-
-    // Logge das Ergebnis der Abfrage (Debugging-Zwecke)
     console.log('Activity saved, ID:', result.insertId);
 
-    // Antwort zurücksenden
     res.status(200).json({
       message: 'Activity saved successfully',
       activityId: result.insertId,
     });
-  });
+  } catch (err) {
+    console.error("Error saving activity:", err);
+    res.status(500).json({ message: 'Error saving activity' });
+  }
 };
 
-export const getUserStats = (req, res) => {
+// User Stats abrufen
+export const getUserStats = async (req, res) => {
   const userId = req.user.userId;
   const { range = 'alltime' } = req.query;
 
@@ -57,7 +52,6 @@ export const getUserStats = (req, res) => {
     case 'year':
       dateCondition = "AND YEAR(date) = YEAR(CURDATE())";
       break;
-    case 'alltime':
     default:
       break;
   }
@@ -69,55 +63,45 @@ export const getUserStats = (req, res) => {
     ${dateCondition}
   `;
 
-  db.query(query, [userId], (err, results) => {
-    if (err) {
-      console.error('Error fetching user stats:', err);
-      return res.status(500).json({ message: 'Error fetching user stats' });
-    }
+  try {
+    const [results] = await db.query(query, [userId]);
 
     const groupedStats = results.reduce((acc, activity) => {
-      if (!acc[activity.type]) {
-        acc[activity.type] = [];
-      }
+      if (!acc[activity.type]) acc[activity.type] = [];
       acc[activity.type].push(activity);
       return acc;
     }, {});
 
     const stats = Object.keys(groupedStats).map(type => {
       const activities = groupedStats[type];
-
-      const typeStats = activities.map(activity => ({
-        id: activity.id,
-        sets: activity.sets,
-        reps: activity.reps,
-        total_reps: activity.sets * activity.reps,
-        date: activity.date,
+      const typeStats = activities.map(a => ({
+        id: a.id,
+        sets: a.sets,
+        reps: a.reps,
+        total_reps: a.sets * a.reps,
+        date: a.date,
       }));
 
-      const maxReps = activities.reduce((max, a) => Math.max(max, a.reps), 0);
+      const maxReps = Math.max(...activities.map(a => a.reps));
       const totalReps = typeStats.reduce((sum, s) => sum + s.total_reps, 0);
 
-      return {
-        type,
-        totalReps,
-        maxReps,
-        stats: typeStats
-      };
+      return { type, totalReps, maxReps, stats: typeStats };
     });
 
     res.status(200).json(stats);
-  });
+  } catch (err) {
+    console.error('Error fetching user stats:', err);
+    res.status(500).json({ message: 'Error fetching user stats' });
+  }
 };
 
-
-
-export const getLeaderboardStats = (req, res) => {
+// Leaderboard abrufen
+export const getLeaderboardStats = async (req, res) => {
   const { range = 'alltime', type = null } = req.query;
 
   let conditions = [];
   let params = [];
 
-  // Zeitbereichsbedingung
   switch (range) {
     case 'day':
       conditions.push("DATE(a.date) = CURDATE()");
@@ -131,12 +115,10 @@ export const getLeaderboardStats = (req, res) => {
     case 'year':
       conditions.push("YEAR(a.date) = YEAR(CURDATE())");
       break;
-    case 'alltime':
     default:
       break;
   }
 
-  // Aktivitäts-Typ
   if (type) {
     conditions.push("a.type = ?");
     params.push(type);
@@ -153,13 +135,9 @@ export const getLeaderboardStats = (req, res) => {
     ${whereClause}
   `;
 
-  db.query(query, params, (err, results) => {
-    if (err) {
-      console.error('Error fetching leaderboard stats:', err);
-      return res.status(500).json({ message: 'Error fetching leaderboard stats' });
-    }
+  try {
+    const [results] = await db.query(query, params);
 
-    // Gruppieren nach Benutzer
     const groupedByUser = results.reduce((acc, activity) => {
       const userId = activity.user_id;
       const activityTotal = activity.sets * activity.reps;
@@ -170,7 +148,7 @@ export const getLeaderboardStats = (req, res) => {
           username: activity.username,
           firstname: activity.firstname,
           lastname: activity.lastname,
-          totalReps: 0
+          totalReps: 0,
         };
       }
 
@@ -178,7 +156,6 @@ export const getLeaderboardStats = (req, res) => {
       return acc;
     }, {});
 
-    // Leaderboard sortieren & kürzen
     const leaderboard = Object.values(groupedByUser)
       .sort((a, b) => b.totalReps - a.totalReps)
       .slice(0, 10)
@@ -192,11 +169,14 @@ export const getLeaderboardStats = (req, res) => {
       }));
 
     res.status(200).json(leaderboard);
-  });
+  } catch (err) {
+    console.error('Error fetching leaderboard stats:', err);
+    res.status(500).json({ message: 'Error fetching leaderboard stats' });
+  }
 };
 
 // Aktivität löschen
-export const deleteActivity = (req, res) => {
+export const deleteActivity = async (req, res) => {
   const userId = req.user.userId;
   const { id } = req.params;
 
@@ -209,16 +189,16 @@ export const deleteActivity = (req, res) => {
     WHERE id = ? AND user_id = ?
   `;
 
-  db.query(query, [id, userId], (err, result) => {
-    if (err) {
-      console.error('Error deleting activity:', err);
-      return res.status(500).json({ message: 'Error deleting activity' });
-    }
+  try {
+    const [result] = await db.query(query, [id, userId]);
 
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: 'Activity not found or not authorized' });
     }
 
     res.status(200).json({ message: 'Activity deleted successfully' });
-  });
+  } catch (err) {
+    console.error('Error deleting activity:', err);
+    res.status(500).json({ message: 'Error deleting activity' });
+  }
 };
